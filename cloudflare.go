@@ -113,6 +113,8 @@ func (t Transport) solveChallenge(resp *http.Response) (*http.Response, error) {
 		return nil, err
 	}
 
+	log.Printf("Request completed, code: %d", resp.StatusCode)
+
 	return resp, nil
 }
 
