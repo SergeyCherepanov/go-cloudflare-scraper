@@ -45,8 +45,12 @@ func (t Transport) RoundTrip(r *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
+	for k, v := range resp.Header {
+		log.Printf("[RESP_HEADER] %s:%s", k, v)
+	}
+	s := resp.Header.Get("Server")
 	// Check if Cloudflare anti-bot is on
-	if resp.StatusCode == 503 && resp.Header.Get("Server") == "cloudflare-nginx" {
+	if resp.StatusCode == 503 && (s == "cloudflare-nginx" || s == "cloudflare") {
 		log.Printf("Solving challenge for %s", resp.Request.URL.Hostname())
 		resp, err := t.solveChallenge(resp)
 
